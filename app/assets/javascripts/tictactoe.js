@@ -7,6 +7,44 @@ var turn = 0;
 
 var player = () => turn % 2 ? 'O' : 'X';
 
+function updateState(square) {
+  var token = player();
+  $(square).text(token);
+}
+
+function setMessage(string) {
+  $('#message').text(string);
+}
+
+function checkWinner() {
+  var board = {};
+  var winner = false;
+
+  $('td').text((index, square) => board[index] = square);
+
+  WINNING_COMBOS.some(function(combo) {
+    if (board[combo[0]] !== "" && board[combo[0]] === board[combo[1]] && board[combo[1]] === board[combo[2]]) {
+      setMessage(`Player ${board[combo[0]]} Won!`);
+      return winner = true;
+    }
+  });
+
+  return winner;
+}
+
+function doTurn(square) {
+  updateState(square);
+  turn++;
+  if (checkWinner()) {
+    saveGame();
+    resetBoard();
+  } else if (turn === 9) {
+    setMessage("Tie game.");
+    saveGame();
+    resetBoard();
+  }
+}
+
 $(document).ready(function() {
   attachListeners();
 });
@@ -62,19 +100,6 @@ function saveGame() {
   }
 }
 
-function doTurn(square) {
-  updateState(square);
-  turn++;
-  if (checkWinner()) {
-    saveGame();
-    resetBoard();
-  } else if (turn === 9) {
-    setMessage("Tie game.");
-    saveGame();
-    resetBoard();
-  }
-}
-
 function resetBoard() {
   $('td').empty();
   turn = 0;
@@ -104,31 +129,6 @@ function saveGame() {
       $("#gameid-" + game.data.id).on('click', () => reloadGame(game.data.id));
     });
   }
-}
-
-function updateState(square) {
-  var token = player();
-  $(square).text(token);
-}
-
-function setMessage(string) {
-  $('#message').text(string);
-}
-
-function checkWinner() {
-  var board = {};
-  var winner = false;
-
-  $('td').text((index, square) => board[index] = square);
-
-  WINNING_COMBOS.some(function(combo) {
-    if (board[combo[0]] !== "" && board[combo[0]] === board[combo[1]] && board[combo[1]] === board[combo[2]]) {
-      setMessage(`Player ${board[combo[0]]} Won!`);
-      return winner = true;
-    }
-  });
-
-  return winner;
 }
 
 function reloadGame(gameID) {
