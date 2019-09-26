@@ -115,15 +115,6 @@ function saveGame() {
   }
 }
 
-function updateState(square) {
-  var token = player();
-  $(square).text(token);
-}
-
-function setMessage(string) {
-  $('#message').text(string);
-}
-
 function checkWinner() {
   var board = {};
   var winner = false;
