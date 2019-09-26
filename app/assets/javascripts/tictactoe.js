@@ -7,6 +7,15 @@ var turn = 0;
 
 var player = () => turn % 2 ? 'O' : 'X';
 
+function updateState(square) {
+  var token = player();
+  $(square).text(token);
+}
+
+function setMessage(string) {
+  $('#message').text(string);
+}
+
 $(document).ready(function() {
   attachListeners();
 });
